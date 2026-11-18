@@ -81,13 +81,19 @@
     }
 
     /* =========================================================
-       FLOATING HIDE / SHOW LINKS TOGGLE BUTTON
+       TOP-RIGHT FLOATING MINIMIZE LINKS TOGGLE BUTTON
        ========================================================= */
-    .minimize-toggle {
+    .top-controls-group {
       position: fixed;
       top: 16px;
       right: 16px;
       z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .minimize-toggle {
       display: inline-flex;
       align-items: center;
       gap: 7px;
@@ -120,43 +126,53 @@
     }
 
     .minimize-toggle svg {
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 14px;
       flex-shrink: 0;
     }
 
     /* =========================================================
-       CLEAN SOUND WAVES MASTER AUDIO CONTROLLER
+       CLEAN SOUND WAVES MASTER AUDIO CONTROLLER (Hidden by Default)
        ========================================================= */
     .radio-widget {
       position: fixed;
       bottom: 20px;
       right: 20px;
       z-index: 60;
-      background: rgba(18, 18, 24, 0.9);
+      background: rgba(18, 18, 24, 0.92);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border: 1px solid rgba(255, 255, 255, 0.22);
       border-radius: 14px;
-      padding: 12px 16px;
-      width: 230px;
+      padding: 12px 14px 12px 16px;
+      width: 245px;
       box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease, opacity 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(16px) scale(0.95);
+      pointer-events: none;
+    }
+
+    body.music-visible .radio-widget {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .radio-main-click {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      flex-grow: 1;
+      cursor: pointer;
     }
 
-    @media (hover: hover) {
-      .radio-widget:hover {
-        border-color: var(--kick-green);
-        transform: translateY(-2px);
-      }
-    }
-
-    .radio-widget:active {
+    .radio-main-click:active {
       transform: scale(0.97);
     }
 
@@ -223,6 +239,73 @@
       0% { height: 6px; }
       100% { height: 18px; }
     }
+
+    /* Minimal Hide Dash Button inside Music Widget */
+    .radio-hide-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    @media (hover: hover) {
+      .radio-hide-btn:hover {
+        background: rgba(255, 255, 255, 0.22);
+        transform: scale(1.1);
+      }
+    }
+
+    .radio-hide-btn:active {
+      transform: scale(0.92);
+    }
+
+    .radio-hide-btn svg {
+      width: 10px;
+      height: 10px;
+      stroke-width: 3;
+    }
+
+    /* Minimal Music Player Trigger Button under links */
+    .music-trigger-btn {
+      margin-top: 10px;
+      width: 100%;
+      padding: 11px;
+      border-radius: 14px;
+      background: rgba(18, 18, 24, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    @media (hover: hover) {
+      .music-trigger-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-1px);
+      }
+    }
+
+    .music-trigger-btn:active { transform: scale(0.98); }
+    .music-trigger-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
 
     /* =========================================================
        CINEMATIC EMAIL SUBSCRIBE POPUP MODAL & PURE PHOTO CAROUSEL
@@ -1021,26 +1104,33 @@
 </head>
 <body>
 
-  <!-- Floating Hide / Show Links Toggle -->
-  <button type="button" id="minimizeBtn" class="minimize-toggle" aria-pressed="false" aria-label="Hide links to view background video">
-    <svg id="minIconHide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-    <svg id="minIconShow" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
-    <span id="minimizeLabel">Hide Links</span>
-  </button>
+  <!-- Top-Right Floating Minimize Links Toggle -->
+  <div class="top-controls-group">
+    <button type="button" id="minimizeBtn" class="minimize-toggle" aria-pressed="false" aria-label="Hide links to view background video">
+      <svg id="minIconHide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      <svg id="minIconShow" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
+      <span id="minimizeLabel">Hide Links</span>
+    </button>
+  </div>
 
-  <!-- CLEAN SOUND WAVES MASTER AUDIO CONTROLLER -->
-  <div id="radioWidget" class="radio-widget" role="button" tabindex="0" aria-label="Audio Player Controls">
-    <div class="radio-info">
-      <div id="radioTrackName" class="radio-track-name">One Last Time</div>
-      <div id="radioStatusText" class="radio-status-text">Click to Play</div>
+  <!-- CLEAN SOUND WAVES MASTER AUDIO CONTROLLER (Hidden by default, has dash to hide) -->
+  <div id="radioWidget" class="radio-widget" role="region" aria-label="Audio Player Controls">
+    <div id="radioMainClick" class="radio-main-click" role="button" tabindex="0" aria-label="Play or advance track">
+      <div class="radio-info">
+        <div id="radioTrackName" class="radio-track-name">Paranoid</div>
+        <div id="radioStatusText" class="radio-status-text">Click to Play</div>
+      </div>
+      <div class="radio-visualizer" aria-hidden="true">
+        <div class="wave-bar" style="height: 4px;"></div>
+        <div class="wave-bar" style="height: 8px;"></div>
+        <div class="wave-bar" style="height: 6px;"></div>
+        <div class="wave-bar" style="height: 10px;"></div>
+        <div class="wave-bar" style="height: 5px;"></div>
+      </div>
     </div>
-    <div class="radio-visualizer" aria-hidden="true">
-      <div class="wave-bar" style="height: 4px;"></div>
-      <div class="wave-bar" style="height: 8px;"></div>
-      <div class="wave-bar" style="height: 6px;"></div>
-      <div class="wave-bar" style="height: 10px;"></div>
-      <div class="wave-bar" style="height: 5px;"></div>
-    </div>
+    <button type="button" id="radioHideBtn" class="radio-hide-btn" aria-label="Hide music player">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    </button>
   </div>
 
   <!-- Cinematic Subscribe Popup Modal with Pure Photo Carousel -->
@@ -1297,6 +1387,12 @@
 
           </div>
 
+          <!-- Music Player Manual Reveal Button Under Hidden Links -->
+          <button type="button" id="musicTriggerBtn" class="music-trigger-btn reveal-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+            <span id="musicTriggerText">Open Music Player</span>
+          </button>
+
         </nav>
 
         <!-- Clean Brand Footer -->
@@ -1329,26 +1425,26 @@
         });
       }
 
-      // 1.1. Audio Playlist mapping your exact original file names (`song1.mp3` through `song11.mp3`)
-      // in your requested playback sequence: One Last Time -> Last Friday Night -> Shooting Stars -> London Tipton -> Rich and Blind :( -> ...
+      // 1.1. Playlist reordered to start with Paranoid (song1.mp3) while maintaining original track numbers
       const playlist = [
+        { title: 'Paranoid', src: 'images/song1.mp3' },
         { title: 'One Last Time', src: 'images/song7.mp3' },
         { title: 'Last Friday Night', src: 'images/song10.mp3' },
         { title: 'Shooting Stars', src: 'images/song4.mp3' },
         { title: 'London Tipton', src: 'images/song3.mp3' },
         { title: 'Rich and Blind :(', src: 'images/song2.mp3' },
         { title: 'Same Old Love', src: 'images/song5.mp3' },
-        { title: "break up with your girlfriend, i'm bored", src: 'images/song6.mp3' },
-        { title: "You'll Never Know", src: 'images/song8.mp3' },
-        { title: 'blank space', src: 'images/song9.mp3' },
-        { title: 'Paranoid', src: 'images/song1.mp3' },
-        { title: 'Come & Get It', src: 'images/song11.mp3' }
+        { title: "You'll Never Know", src: 'images/song8.mp3' }
       ];
       let currentTrackIdx = 0;
       let audioElement = new Audio(playlist[currentTrackIdx].src);
       audioElement.preload = 'auto';
 
       const radioWidget = document.getElementById('radioWidget');
+      const radioMainClick = document.getElementById('radioMainClick');
+      const radioHideBtn = document.getElementById('radioHideBtn');
+      const musicTriggerBtn = document.getElementById('musicTriggerBtn');
+      const musicTriggerText = document.getElementById('musicTriggerText');
       const radioTrackName = document.getElementById('radioTrackName');
       const radioStatusText = document.getElementById('radioStatusText');
 
@@ -1392,10 +1488,27 @@
         });
       });
 
-      if (radioWidget) {
-        radioWidget.addEventListener('click', (e) => {
+      if (radioMainClick) {
+        radioMainClick.addEventListener('click', (e) => {
           e.stopPropagation();
           handleWidgetClick();
+        });
+      }
+
+      // Toggle Music Player Visibility via Button & Dash
+      if (musicTriggerBtn && radioWidget) {
+        musicTriggerBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isVisible = document.body.classList.toggle('music-visible');
+          musicTriggerText.textContent = isVisible ? 'Close Music Player' : 'Open Music Player';
+        });
+      }
+
+      if (radioHideBtn) {
+        radioHideBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          document.body.classList.remove('music-visible');
+          if (musicTriggerText) musicTriggerText.textContent = 'Open Music Player';
         });
       }
 
