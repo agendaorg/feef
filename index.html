@@ -864,30 +864,59 @@
 
     .link-card:active { transform: scale(0.985); }
 
-    /* Animated Perimeter Borders ONLY for Discord & Kick (Bulletproof Cross-Device) */
+    /* =========================================================
+       CLEAN BREATHING BORDER ANIMATION (Fallback for Older Devices)
+       ========================================================= */
     .link-card.card-discord {
-      border: 2px solid transparent;
-      animation: spinBorder 4s linear infinite;
+      border: 1px solid rgba(88, 101, 242, 0.4);
       background-color: var(--surface-solid);
-      background-image:
-        linear-gradient(var(--surface-solid), var(--surface-solid)),
-        conic-gradient(from var(--border-angle), rgba(88, 101, 242, 0.16) 0%, rgba(88, 101, 242, 0.24) 62%, var(--discord-blue) 82%, #b8c2ff 90%, var(--discord-blue) 96%, rgba(88, 101, 242, 0.16) 100%);
-      background-origin: border-box;
-      background-clip: padding-box, border-box;
+      animation: cleanPulseDiscord 3.5s ease-in-out infinite;
     }
     .link-card.card-discord .platform-icon { color: var(--discord-blue); }
 
     .link-card.card-kick {
-      border: 2px solid transparent;
-      animation: spinBorder 3.8s linear infinite;
+      border: 1px solid rgba(83, 252, 24, 0.4);
       background-color: var(--surface-solid);
-      background-image:
-        linear-gradient(var(--surface-solid), var(--surface-solid)),
-        conic-gradient(from var(--border-angle), rgba(83, 252, 24, 0.14) 0%, rgba(83, 252, 24, 0.22) 62%, var(--kick-green) 82%, #c4ffad 90%, var(--kick-green) 96%, rgba(83, 252, 24, 0.14) 100%);
-      background-origin: border-box;
-      background-clip: padding-box, border-box;
+      animation: cleanPulseKick 3.5s ease-in-out infinite;
     }
     .link-card.card-kick .platform-icon { color: var(--kick-green); }
+
+    @keyframes cleanPulseDiscord {
+      0%, 100% { border-color: rgba(88, 101, 242, 0.25); }
+      50% { border-color: var(--discord-blue); }
+    }
+
+    @keyframes cleanPulseKick {
+      0%, 100% { border-color: rgba(83, 252, 24, 0.25); }
+      50% { border-color: var(--kick-green); }
+    }
+
+    /* =========================================================
+       MODERN 60FPS SPINNING ANIMATION (Runs on Modern Devices)
+       ========================================================= */
+    @supports (background: paint(houdini)) or (animation-timeline: foo) or ((--anim: true)) {
+      .link-card.card-discord {
+        border: 2px solid transparent;
+        animation: spinBorder 4s linear infinite;
+        background-color: var(--surface-solid);
+        background-image:
+          linear-gradient(var(--surface-solid), var(--surface-solid)),
+          conic-gradient(from var(--border-angle), rgba(88, 101, 242, 0.16) 0%, rgba(88, 101, 242, 0.24) 62%, var(--discord-blue) 82%, #b8c2ff 90%, var(--discord-blue) 96%, rgba(88, 101, 242, 0.16) 100%);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+      }
+
+      .link-card.card-kick {
+        border: 2px solid transparent;
+        animation: spinBorder 3.8s linear infinite;
+        background-color: var(--surface-solid);
+        background-image:
+          linear-gradient(var(--surface-solid), var(--surface-solid)),
+          conic-gradient(from var(--border-angle), rgba(83, 252, 24, 0.14) 0%, rgba(83, 252, 24, 0.22) 62%, var(--kick-green) 82%, #c4ffad 90%, var(--kick-green) 96%, rgba(83, 252, 24, 0.14) 100%);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+      }
+    }
 
     @keyframes spinBorder { to { --border-angle: 360deg; } }
 
@@ -1568,3 +1597,4 @@
 
 </body>
 </html>
+```[cite: 1]
