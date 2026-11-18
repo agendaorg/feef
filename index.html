@@ -126,6 +126,105 @@
     }
 
     /* =========================================================
+       CLEAN SOUND WAVES MASTER AUDIO CONTROLLER
+       ========================================================= */
+    .radio-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 60;
+      background: rgba(18, 18, 24, 0.9);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 14px;
+      padding: 12px 16px;
+      width: 230px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (hover: hover) {
+      .radio-widget:hover {
+        border-color: var(--kick-green);
+        transform: translateY(-2px);
+      }
+    }
+
+    .radio-widget:active {
+      transform: scale(0.97);
+    }
+
+    .radio-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow: hidden;
+      flex-grow: 1;
+    }
+
+    .radio-track-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: -0.01em;
+    }
+
+    .radio-status-text {
+      font-size: 10px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .radio-widget.playing .radio-status-text {
+      color: var(--kick-green);
+    }
+
+    /* Interactive Audio-Reactive Visualizer Waves Bar Container */
+    .radio-visualizer {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 20px;
+      flex-shrink: 0;
+      padding: 2px 0;
+    }
+
+    .wave-bar {
+      width: 3px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      transition: height 0.08s ease, background-color 0.2s ease;
+    }
+
+    .radio-widget.playing .wave-bar {
+      background: var(--kick-green);
+      box-shadow: 0 0 8px rgba(83, 252, 24, 0.6);
+      animation: waveBounce 0.8s ease-in-out infinite alternate;
+    }
+
+    .radio-widget.playing .wave-bar:nth-child(1) { animation-delay: 0.1s; }
+    .radio-widget.playing .wave-bar:nth-child(2) { animation-delay: 0.3s; }
+    .radio-widget.playing .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+    .radio-widget.playing .wave-bar:nth-child(4) { animation-delay: 0.4s; }
+    .radio-widget.playing .wave-bar:nth-child(5) { animation-delay: 0.15s; }
+
+    @keyframes waveBounce {
+      0% { height: 6px; }
+      100% { height: 18px; }
+    }
+
+    /* =========================================================
        CINEMATIC EMAIL SUBSCRIBE POPUP MODAL & PURE PHOTO CAROUSEL
        ========================================================= */
     .modal-backdrop {
@@ -929,6 +1028,21 @@
     <span id="minimizeLabel">Hide Links</span>
   </button>
 
+  <!-- CLEAN SOUND WAVES MASTER AUDIO CONTROLLER -->
+  <div id="radioWidget" class="radio-widget" role="button" tabindex="0" aria-label="Audio Player Controls">
+    <div class="radio-info">
+      <div id="radioTrackName" class="radio-track-name">One Last Time</div>
+      <div id="radioStatusText" class="radio-status-text">Click to Play</div>
+    </div>
+    <div class="radio-visualizer" aria-hidden="true">
+      <div class="wave-bar" style="height: 4px;"></div>
+      <div class="wave-bar" style="height: 8px;"></div>
+      <div class="wave-bar" style="height: 6px;"></div>
+      <div class="wave-bar" style="height: 10px;"></div>
+      <div class="wave-bar" style="height: 5px;"></div>
+    </div>
+  </div>
+
   <!-- Cinematic Subscribe Popup Modal with Pure Photo Carousel -->
   <div id="subscribeModal" class="modal-backdrop active" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-card">
@@ -1215,6 +1329,78 @@
         });
       }
 
+      // 1.1. Audio Playlist mapping your exact original file names (`song1.mp3` through `song11.mp3`)
+      // in your requested playback sequence: One Last Time -> Last Friday Night -> Shooting Stars -> London Tipton -> Rich and Blind :( -> ...
+      const playlist = [
+        { title: 'One Last Time', src: 'images/song7.mp3' },
+        { title: 'Last Friday Night', src: 'images/song10.mp3' },
+        { title: 'Shooting Stars', src: 'images/song4.mp3' },
+        { title: 'London Tipton', src: 'images/song3.mp3' },
+        { title: 'Rich and Blind :(', src: 'images/song2.mp3' },
+        { title: 'Same Old Love', src: 'images/song5.mp3' },
+        { title: "break up with your girlfriend, i'm bored", src: 'images/song6.mp3' },
+        { title: "You'll Never Know", src: 'images/song8.mp3' },
+        { title: 'blank space', src: 'images/song9.mp3' },
+        { title: 'Paranoid', src: 'images/song1.mp3' },
+        { title: 'Come & Get It', src: 'images/song11.mp3' }
+      ];
+      let currentTrackIdx = 0;
+      let audioElement = new Audio(playlist[currentTrackIdx].src);
+      audioElement.preload = 'auto';
+
+      const radioWidget = document.getElementById('radioWidget');
+      const radioTrackName = document.getElementById('radioTrackName');
+      const radioStatusText = document.getElementById('radioStatusText');
+
+      function updateDisplay() {
+        if (radioTrackName) {
+          radioTrackName.textContent = playlist[currentTrackIdx].title;
+        }
+      }
+
+      function handleWidgetClick() {
+        if (audioElement.paused) {
+          audioElement.play().then(() => {
+            radioWidget.classList.add('playing');
+            if (radioStatusText) radioStatusText.textContent = 'Now Playing';
+          }).catch(err => {
+            console.log("Audio playback blocked/error:", err);
+          });
+        } else {
+          // If already playing, clicking smoothly advances to the next track in sequence!
+          audioElement.pause();
+          currentTrackIdx = (currentTrackIdx + 1) % playlist.length;
+          audioElement.src = playlist[currentTrackIdx].src;
+          updateDisplay();
+          audioElement.play().then(() => {
+            radioWidget.classList.add('playing');
+            if (radioStatusText) radioStatusText.textContent = 'Now Playing';
+          }).catch(err => {
+            radioWidget.classList.remove('playing');
+            if (radioStatusText) radioStatusText.textContent = 'Click to Play';
+          });
+        }
+      }
+
+      audioElement.addEventListener('ended', () => {
+        currentTrackIdx = (currentTrackIdx + 1) % playlist.length;
+        audioElement.src = playlist[currentTrackIdx].src;
+        updateDisplay();
+        audioElement.play().catch(() => {
+          radioWidget.classList.remove('playing');
+          if (radioStatusText) radioStatusText.textContent = 'Click to Play';
+        });
+      });
+
+      if (radioWidget) {
+        radioWidget.addEventListener('click', (e) => {
+          e.stopPropagation();
+          handleWidgetClick();
+        });
+      }
+
+      updateDisplay();
+
       // 1.2. Custom Badge Click/Tap Tooltip Toggle for Mobile & Desktop
       const twitterCheckWrap = document.getElementById('twitterCheckWrap');
       if (twitterCheckWrap) {
@@ -1243,10 +1429,7 @@
       if (avatarWrap && avatarImg) {
         const shiftAvatar = () => {
           avatarWrap.classList.add('shifting');
-          
-          // Advance index and wrap around cleanly using modulo arithmetic
           currentAvatarIdx = (currentAvatarIdx + 1) % avatarSources.length;
-          
           setTimeout(() => {
             avatarImg.src = avatarSources[currentAvatarIdx];
             avatarWrap.classList.remove('shifting');
