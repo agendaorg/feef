@@ -1117,7 +1117,7 @@
   <div id="radioWidget" class="radio-widget" role="region" aria-label="Audio Player Controls">
     <div id="radioMainClick" class="radio-main-click" role="button" tabindex="0" aria-label="Play or advance track">
       <div class="radio-info">
-        <div id="radioTrackName" class="radio-track-name">Paranoid</div>
+        <div id="radioTrackName" class="radio-track-name">London Tipton</div>
         <div id="radioStatusText" class="radio-status-text">Click to Play</div>
       </div>
       <div class="radio-visualizer" aria-hidden="true">
@@ -1425,14 +1425,15 @@
         });
       }
 
-      // 1.1. Playlist reordered to start with Paranoid (song1.mp3) while maintaining original track numbers
+      // 1.1. Updated Playlist with "Conversations" (song14.mp3) positioned between London Tipton and Rich and Blind :(
       const playlist = [
+        { title: 'London Tipton', src: 'images/song3.mp3' },
+        { title: 'Conversations', src: 'images/song14.mp3' },
+        { title: 'Rich and Blind :(', src: 'images/song2.mp3' },
         { title: 'Paranoid', src: 'images/song1.mp3' },
         { title: 'One Last Time', src: 'images/song7.mp3' },
         { title: 'Last Friday Night', src: 'images/song10.mp3' },
         { title: 'Shooting Stars', src: 'images/song4.mp3' },
-        { title: 'London Tipton', src: 'images/song3.mp3' },
-        { title: 'Rich and Blind :(', src: 'images/song2.mp3' },
         { title: 'Same Old Love', src: 'images/song5.mp3' },
         { title: "You'll Never Know", src: 'images/song8.mp3' }
       ];
