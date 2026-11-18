@@ -864,22 +864,28 @@
 
     .link-card:active { transform: scale(0.985); }
 
-    /* Animated Perimeter Borders ONLY for Discord & Kick */
+    /* Animated Perimeter Borders ONLY for Discord & Kick (Bulletproof Cross-Device) */
     .link-card.card-discord {
       border: 2px solid transparent;
       animation: spinBorder 4s linear infinite;
-      background:
-        linear-gradient(var(--surface-solid), var(--surface-solid)) padding-box,
-        conic-gradient(from var(--border-angle), rgba(88, 101, 242, 0.16) 0%, rgba(88, 101, 242, 0.24) 62%, var(--discord-blue) 82%, #b8c2ff 90%, var(--discord-blue) 96%, rgba(88, 101, 242, 0.16) 100%) border-box;
+      background-color: var(--surface-solid);
+      background-image:
+        linear-gradient(var(--surface-solid), var(--surface-solid)),
+        conic-gradient(from var(--border-angle), rgba(88, 101, 242, 0.16) 0%, rgba(88, 101, 242, 0.24) 62%, var(--discord-blue) 82%, #b8c2ff 90%, var(--discord-blue) 96%, rgba(88, 101, 242, 0.16) 100%);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
     }
     .link-card.card-discord .platform-icon { color: var(--discord-blue); }
 
     .link-card.card-kick {
       border: 2px solid transparent;
       animation: spinBorder 3.8s linear infinite;
-      background:
-        linear-gradient(var(--surface-solid), var(--surface-solid)) padding-box,
-        conic-gradient(from var(--border-angle), rgba(83, 252, 24, 0.14) 0%, rgba(83, 252, 24, 0.22) 62%, var(--kick-green) 82%, #c4ffad 90%, var(--kick-green) 96%, rgba(83, 252, 24, 0.14) 100%) border-box;
+      background-color: var(--surface-solid);
+      background-image:
+        linear-gradient(var(--surface-solid), var(--surface-solid)),
+        conic-gradient(from var(--border-angle), rgba(83, 252, 24, 0.14) 0%, rgba(83, 252, 24, 0.22) 62%, var(--kick-green) 82%, #c4ffad 90%, var(--kick-green) 96%, rgba(83, 252, 24, 0.14) 100%);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
     }
     .link-card.card-kick .platform-icon { color: var(--kick-green); }
 
