@@ -1223,50 +1223,6 @@
         });
       }
 
-      // 1.1. Invisible Background Playlist (Auto-starts on load or on first click / closing modal)
-      const playlist = [
-        { title: 'Conversations', src: 'images/song14.mp3' },
-        { title: 'Miss Me', src: 'images/song16.mp3' },
-        { title: 'One Last Time', src: 'images/song7.mp3' },
-        { title: 'London Tipton', src: 'images/song3.mp3' },
-        { title: 'Rich and Blind :(', src: 'images/song2.mp3' },
-        { title: 'Paranoid', src: 'images/song1.mp3' },
-        { title: 'Last Friday Night', src: 'images/song10.mp3' },
-        { title: 'Shooting Stars', src: 'images/song4.mp3' },
-        { title: 'Same Old Love', src: 'images/song5.mp3' },
-        { title: "You'll Never Know", src: 'images/song8.mp3' }
-      ];
-      let currentTrackIdx = 0;
-      const audioElement = new Audio(playlist[currentTrackIdx].src);
-      audioElement.preload = 'auto';
-
-      function startBackgroundMusic() {
-        if (audioElement.paused) {
-          audioElement.play().then(() => {
-            window.removeEventListener('click', startBackgroundMusic);
-            window.removeEventListener('touchstart', startBackgroundMusic);
-            window.removeEventListener('keydown', startBackgroundMusic);
-          }).catch(() => {
-            // Browser autoplay policy waiting for first user interaction
-          });
-        }
-      }
-
-      // Advance seamlessly through the exact playlist order when each song finishes
-      audioElement.addEventListener('ended', () => {
-        currentTrackIdx = (currentTrackIdx + 1) % playlist.length;
-        audioElement.src = playlist[currentTrackIdx].src;
-        audioElement.play().catch(() => {});
-      });
-
-      // Attempt immediate playback on page load
-      startBackgroundMusic();
-
-      // Fallback unlock on first interaction (including clicking X on the popup or anywhere on the page)
-      window.addEventListener('click', startBackgroundMusic);
-      window.addEventListener('touchstart', startBackgroundMusic, { passive: true });
-      window.addEventListener('keydown', startBackgroundMusic);
-
       // 1.2. Custom Badge Click/Tap Tooltip Toggle for Mobile & Desktop
       const twitterCheckWrap = document.getElementById('twitterCheckWrap');
       if (twitterCheckWrap) {
@@ -1415,7 +1371,6 @@
           subscribeModal.classList.remove('active');
           if (reopenSubscribeBtn) reopenSubscribeBtn.classList.add('visible');
         }
-        startBackgroundMusic();
       }
 
       function openModal() {
